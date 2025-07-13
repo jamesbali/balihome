@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: balihome-app
+    container_name: balihome-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/balihome
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: secret
+    networks:
+      - balihome-net
+
+  db:
+    image: postgres:15
+    container_name: balihome-postgres
+    environment:
+      POSTGRES_DB: balihome
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - balihome-net
+
+volumes:
+  postgres_data:
+
+networks:
+  balihome-net:
