@@ -1,3 +1,5 @@
+# docker-compose.yml
+
 version: "3.8"
 
 services:
@@ -13,9 +15,7 @@ services:
       - db
     restart: always
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/balihome
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: secret
+      SPRING_PROFILES_ACTIVE: docker
     networks:
       - balihome-net
 

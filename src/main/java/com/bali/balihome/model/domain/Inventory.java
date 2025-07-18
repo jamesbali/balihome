@@ -1,10 +1,9 @@
 package com.bali.balihome.model.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.*;
 import lombok.*;
-import lombok.NoArgsConstructor;
+
 
 @Entity
 @Table(name = "inventory")

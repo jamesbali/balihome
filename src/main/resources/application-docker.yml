@@ -1,8 +1,8 @@
-# src/main/resources/application.yml
+# src/main/resources/application-docker.yml
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/balihome
+    url: jdbc:postgresql://db:5432/balihome  # "db" is service name from docker-compose.yml
     username: postgres
     password: secret
     driver-class-name: org.postgresql.Driver
