@@ -2,8 +2,10 @@ package com.bali.balihome.model.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import com.bali.balihome.security.user.User;
 import lombok.*;
 import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "customers")
@@ -37,8 +39,21 @@ public class Customer {
     @NotBlank(message = "Address is required")
     private String address;
 
-    private LocalDateTime createdAt;
+    // === ADD THIS RELATIONSHIP ===
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", unique = true)
+    private User user;  // Nullable for guest customers
 
+    // === ADD THESE HELPER METHODS ===
+    public boolean isRegisteredCustomer() {
+        return user != null;
+    }
+
+    public boolean isGuestCustomer() {
+        return user == null;
+    }
+
+    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     @PrePersist

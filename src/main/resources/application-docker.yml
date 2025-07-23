@@ -1,4 +1,4 @@
-# src/main/resources/application-docker.yml
+# src/main/resources/application-docker.yml (REPLACE your existing)
 
 spring:
   datasource:
@@ -10,8 +10,69 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false  # Disable in Docker to reduce log noise
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+# JWT Configuration (SAME as main application.yml)
+app:
+  jwt:
+    secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970332663336739464364416848473646466573657174564B4B4D46717149753D
+    expiration: 86400000 # 24 hours in milliseconds
+    refresh-expiration: 604800000 # 7 days in milliseconds
+
+  # Payment configuration
+  payment:
+    gateway:
+      mock: true  # Keep mock for Docker environment
+    currency: USD
+
+  # CORS configuration for Docker
+  cors:
+    allowed-origins:
+      - http://localhost:3000
+      - http://localhost:4200
+      - http://host.docker.internal:3000  # Docker host access
+      - http://host.docker.internal:4200
+    allowed-methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - OPTIONS
+      - PATCH
+    allowed-headers:
+      - "*"
+    allow-credentials: true
+
+# Logging configuration for Docker
+logging:
+  level:
+    com.bali.balihome: INFO  # Less verbose in Docker
+    com.bali.balihome.security: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
+    root: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Server configuration for Docker
+server:
+  port: 8080
+  servlet:
+    context-path: /
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always

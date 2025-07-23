@@ -1,5 +1,6 @@
 package com.bali.balihome.security.user;
 
+import com.bali.balihome.model.domain.Customer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -113,6 +114,14 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return accountEnabled;
+    }
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Customer customer;  // Nullable for non-customer users (employees, etc.)
+
+    // === ADD HELPER METHOD ===
+    public boolean hasCustomerProfile() {
+        return customer != null;
     }
 
 

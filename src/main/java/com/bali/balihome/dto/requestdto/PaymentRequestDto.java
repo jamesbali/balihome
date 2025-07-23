@@ -1,6 +1,7 @@
 package com.bali.balihome.dto.requestdto;
 
 import com.bali.balihome.model.enums.PaymentMethod;
+import com.bali.balihome.model.enums.PaymentSource;
 import com.bali.balihome.model.enums.PaymentStatus;
 import jakarta.validation.constraints.*;
 import jakarta.validation.constraints.DecimalMin;
@@ -26,6 +27,11 @@ public record PaymentRequestDto(
         String transactionId,
 
         @NotNull(message = "Payment date is required")
-        LocalDateTime paidAt
+        LocalDateTime paidAt,
+
+        PaymentSource paymentSource,  // Optional - defaults to IN_STORE
+        String referenceNumber,       // Check number, POS terminal, etc.
+        String notes,                 // Staff notes
+        String currency              // Optional - defaults to USD
 ) {
 }

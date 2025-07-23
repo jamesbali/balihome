@@ -1,6 +1,7 @@
-# src/main/resources/application.yml
+# src/main/resources/application.yml (CORRECTED VERSION)
 
 spring:
+    # ... rest of your existing config
   datasource:
     url: jdbc:postgresql://localhost:5432/balihome
     username: postgres
@@ -15,3 +16,68 @@ spring:
       hibernate:
         format_sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+# JWT Configuration (REQUIRED for your security to work)
+app:
+  jwt:
+    secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970332663336739464364416848473646466573657174564B4B4D46717149753D
+    expiration: 86400000 # 24 hours in milliseconds
+    refresh-expiration: 604800000 # 7 days in milliseconds
+
+  # Payment configuration
+  payment:
+    gateway:
+      mock: true  # Set to false when using real payment gateway (Stripe/PayPal)
+    currency: USD
+
+  # CORS configuration
+  cors:
+    allowed-origins:
+      - http://localhost:3000  # React frontend
+      - http://localhost:4200  # Angular frontend
+      - http://localhost:8081  # Alternative frontend port
+    allowed-methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - OPTIONS
+      - PATCH
+    allowed-headers:
+      - "*"
+    allow-credentials: true
+
+# Logging configuration
+logging:
+  level:
+    com.bali.balihome: DEBUG
+    com.bali.balihome.security: DEBUG
+    com.bali.balihome.service.impl.PaymentServiceImpl: DEBUG
+    com.bali.balihome.service.impl.MockPaymentGatewayService: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Server configuration
+server:
+  port: 8080
+  servlet:
+    context-path: /
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on_param
+    include-exception: false
+
+# Management endpoints (for health checks, metrics)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized

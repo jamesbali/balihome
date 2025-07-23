@@ -6,6 +6,7 @@ import com.bali.balihome.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -20,6 +21,7 @@ public class ProductController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     public ResponseEntity<ProductResponseDto> createProduct(@Valid @RequestBody ProductRequestDto dto) {
         ProductResponseDto created = productService.createProduct(dto);
         return ResponseEntity.created(URI.create("/api/v1/products/" + created.id()))
@@ -38,6 +40,7 @@ public class ProductController {
 
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     public ResponseEntity<ProductResponseDto> updateProduct(@PathVariable Long id,
                                                             @Valid @RequestBody ProductRequestDto dto) {
         return ResponseEntity.ok(productService.updateProduct(id, dto));
@@ -45,6 +48,7 @@ public class ProductController {
 
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
